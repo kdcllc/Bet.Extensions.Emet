@@ -1,0 +1,10 @@
+<Project>
+
+  <PropertyGroup>
+    <RepoRoot>$(MSBuildThisFileDirectory)</RepoRoot>
+  </PropertyGroup>
+
+  <Import Project="build\settings.props" />
+  <Import Project="build\sources.props" />
+
+</Project>

@@ -1,0 +1,16 @@
+<Project>
+  <Import Project="$(DotNetRestoreSourcePropsPath)" Condition="'$(DotNetRestoreSourcePropsPath)' != ''"/>
+ <!-- https://github.com/aspnet/AspNetCore/blob/master/docs/DailyBuilds.md -->
+  <PropertyGroup Label="RestoreSources">
+    <RestoreSources>$(DotNetRestoreSources)</RestoreSources>
+    <RestoreSources Condition="'$(DotNetBuildOffline)' != 'false'">
+      $(RestoreSources);
+      https://dotnetfeed.blob.core.windows.net/dotnet-core/index.json;
+      https://dotnetfeed.blob.core.windows.net/aspnet-extensions/index.json;
+      https://dotnetfeed.blob.core.windows.net/aspnet-entityframeworkcore/index.json;
+      https://dotnetfeed.blob.core.windows.net/aspnet-aspnetcore/index.json;
+      https://dotnetfeed.blob.core.windows.net/aspnet-blazor/index.json;
+      https://api.nuget.org/v3/index.json;
+    </RestoreSources>
+  </PropertyGroup>
+</Project>
