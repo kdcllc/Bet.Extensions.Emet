@@ -5,7 +5,7 @@ using RulesEngine.Models;
 
 namespace Bet.Extensions.Emet
 {
-    public interface IRulesEngineStore
+    public interface IEmetRulesStore
     {
         Task<WorkflowRules[]> GetAsync(CancellationToken cancellationToken);
 

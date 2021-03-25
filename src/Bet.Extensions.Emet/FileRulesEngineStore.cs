@@ -9,7 +9,7 @@ using re = RulesEngine.RulesEngine;
 
 namespace Bet.Extensions.Emet
 {
-    public class FileRulesEngineStore : IRulesEngineStore
+    public class FileRulesEngineStore : IEmetRulesStore
     {
         private readonly ILogger<FileRulesEngineStore> _logger;
 
@@ -25,7 +25,7 @@ namespace Bet.Extensions.Emet
 
         public Task SaveAsync(WorkflowRules[] rules, CancellationToken cancellationToken)
         {
-            var engine = new re(null);
+            var engine = new re(rules);
 
             // provides with workflow validation
             engine.AddWorkflow(rules);
