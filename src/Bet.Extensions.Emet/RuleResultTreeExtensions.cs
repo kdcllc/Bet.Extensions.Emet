@@ -8,14 +8,19 @@ namespace RulesEngine.Extensions
 {
     public static class RuleResultTreeExtensions
     {
-        public static List<RuleResultTree> OnSuccess2(this List<RuleResultTree> ruleResultTrees, Action<string, string> onSuccessFunc)
+        /// <summary>
+        /// Creates an entry point on success.
+        /// </summary>
+        /// <param name="ruleResultTrees"></param>
+        /// <param name="onSuccess"></param>
+        /// <returns></returns>
+        public static List<RuleResultTree> OnResultSuccess(this List<RuleResultTree> ruleResultTrees, Action<string, string> onSuccess)
         {
             var successfulRuleResult = ruleResultTrees.FirstOrDefault(ruleResult => ruleResult.IsSuccess);
             if (successfulRuleResult != null)
             {
-                var c = successfulRuleResult.Rule.ErrorMessage;
                 var eventName = successfulRuleResult.Rule.SuccessEvent ?? successfulRuleResult.Rule.RuleName;
-                onSuccessFunc(eventName, c);
+                onSuccess(eventName, successfulRuleResult.Rule.RuleName);
             }
 
             return ruleResultTrees;
@@ -25,15 +30,15 @@ namespace RulesEngine.Extensions
         /// Calls the Failure Func if all rules failed in the ruleReults.
         /// </summary>
         /// <param name="ruleResultTrees"></param>
-        /// <param name="onFailureFunc"></param>
+        /// <param name="onFailure"></param>
         /// <returns></returns>
-        public static List<RuleResultTree> OnFail2(this List<RuleResultTree> ruleResultTrees, Action<string> onFailureFunc)
+        public static List<RuleResultTree> OnResultFail(this List<RuleResultTree> ruleResultTrees, Action<string> onFailure)
         {
             var allFailure = ruleResultTrees.All(ruleResult => !ruleResult.IsSuccess);
             if (allFailure)
             {
                 var firstFailure = ruleResultTrees.FirstOrDefault(ruleResult => !ruleResult.IsSuccess);
-                onFailureFunc(firstFailure.Rule.ErrorMessage);
+                onFailure(firstFailure.Rule.ErrorMessage);
             }
 
             return ruleResultTrees;
@@ -42,6 +47,11 @@ namespace RulesEngine.Extensions
         public static bool IsFailed(this List<RuleResultTree> ruleResultTrees)
         {
             return ruleResultTrees.All(ruleResult => !ruleResult.IsSuccess);
+        }
+
+        public static bool IsSuccess(this List<RuleResultTree> ruleResultTrees)
+        {
+            return ruleResultTrees.Any(ruleResult => ruleResult.IsSuccess);
         }
     }
 }

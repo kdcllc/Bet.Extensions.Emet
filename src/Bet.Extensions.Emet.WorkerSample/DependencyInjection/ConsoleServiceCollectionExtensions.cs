@@ -8,8 +8,6 @@ using Bet.Extensions.Emet.WorkerSample.Services;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-using RulesEngine.HelperFunctions;
-
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ConsoleServiceCollectionExtensions
@@ -20,10 +18,10 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddCountryWorkflow()
                     .AddDiscountWorkflow()
-                    .AddReturenentWorkflow();
+                    .AddRetirementEligibilityWorkflow();
         }
 
-        public static IServiceCollection AddReturenentWorkflow(this IServiceCollection services)
+        public static IServiceCollection AddRetirementEligibilityWorkflow(this IServiceCollection services)
         {
             services.AddTransient<IRetirementService>(
                     sp =>
@@ -79,7 +77,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     Workflows.CountryWorkflow,
                     reSettings: settings =>
                     {
-                        settings.CustomTypes = new Type[] { typeof(ExpressionUtils) };
+                        settings.CustomTypes = new Type[] { typeof(ExpressionHelper) };
                     })
                     .AddFileLoader(configure: (options, sp) =>
                     {

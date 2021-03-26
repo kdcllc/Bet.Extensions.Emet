@@ -5,6 +5,9 @@ using RulesEngine.Interfaces;
 
 namespace Bet.Extensions.Emet
 {
+    /// <summary>
+    /// The main container interface for managing <see cref="IRulesEngine"/>.
+    /// </summary>
     public interface IEmetProvider
     {
         /// <summary>

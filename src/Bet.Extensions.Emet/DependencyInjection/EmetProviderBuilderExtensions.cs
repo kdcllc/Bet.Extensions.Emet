@@ -14,7 +14,7 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class EmetProviderBuilderExtensions
     {
         /// <summary>
-        /// Adds <see cref="EmetFileStore"/>.
+        /// Adds <see cref="EmetFileStore"/> storage with the workflow.
         /// </summary>
         /// <param name="builder"></param>
         /// <param name="sectionName"></param>

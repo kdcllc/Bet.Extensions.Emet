@@ -26,7 +26,7 @@ namespace Bet.Extensions.Emet.WorkerSample.Services
             var f = resultList.Where(x => x.IsSuccess).OrderBy(o => o.Rule.RuleName);
             //var p = f.Rule.RuleName;
 
-            resultList.OnSuccess2((eventName, errorMessage) =>
+            resultList.OnResultSuccess((eventName, errorMessage) =>
             {
                 discount = Convert.ToDecimal(eventName);
             });

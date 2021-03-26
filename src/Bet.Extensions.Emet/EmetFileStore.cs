@@ -32,16 +32,21 @@ namespace Bet.Extensions.Emet
 
         public string Name { get; }
 
-        public Task<WorkflowRules[]> GetAsync(CancellationToken cancellationToken)
+        public Task<WorkflowRules[]> RetrieveAsync(CancellationToken cancellationToken)
         {
             var filePath = Path.Combine(Directory.GetCurrentDirectory(), _options.FileName);
+            if (Path.IsPathRooted(_options.FileName))
+            {
+                filePath = _options.FileName;
+            }
+
             var fileData = File.ReadAllText(filePath);
             var rules = JsonConvert.DeserializeObject<WorkflowRules[]>(fileData);
 
             return Task.FromResult(rules);
         }
 
-        public Task SaveAsync(WorkflowRules[] rules, CancellationToken cancellationToken)
+        public Task PersistAsync(WorkflowRules[] rules, CancellationToken cancellationToken)
         {
             var engine = new re(rules);
 
@@ -51,6 +56,11 @@ namespace Bet.Extensions.Emet
             var workflows = JsonConvert.SerializeObject(rules);
 
             var filePath = Path.Combine(Directory.GetCurrentDirectory(), _options.FileName);
+            if (Path.IsPathRooted(_options.FileName))
+            {
+                filePath = _options.FileName;
+            }
+
             File.WriteAllText(filePath, workflows);
 
             return Task.CompletedTask;

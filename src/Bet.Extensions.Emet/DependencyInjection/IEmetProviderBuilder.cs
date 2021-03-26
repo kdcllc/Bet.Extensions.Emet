@@ -1,9 +1,14 @@
 ﻿using System;
 
+using Bet.Extensions.Emet;
+
 using RulesEngine.Models;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
+    /// <summary>
+    /// The <see cref="IServiceCollection"/> builder for <see cref="IEmetProvider"/>.
+    /// </summary>
     public interface IEmetProviderBuilder
     {
         /// <summary>

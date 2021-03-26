@@ -65,7 +65,7 @@ namespace Bet.Extensions.Emet.WorkerSample
 
             _logger.LogInformation(discountMessage);
 
-            var country = "usa";
+            var country = "Israel";
             var isValidCountry = await _countryService.IsAcceptableAsync(country);
 
             _logger.LogInformation("{country} is acceptable: {isValid}", country, isValidCountry);

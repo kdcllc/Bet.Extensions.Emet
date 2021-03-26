@@ -31,7 +31,7 @@ namespace Bet.Extensions.Emet.WorkerSample.Services
 
             var result = await engine.ExecuteAllRulesAsync(_provider.Name, input);
 
-            result.OnFail2((errorMessage) =>
+            result.OnResultFail((errorMessage) =>
             {
                 _logger.LogError("{message}", errorMessage);
             });

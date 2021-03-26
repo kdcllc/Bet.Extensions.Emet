@@ -43,7 +43,7 @@ namespace Bet.Extensions.Emet
         private async Task<IRulesEngine> GetRulesEngine()
         {
             // TODO: add cancellation token based on host
-            var workflows = await Store.GetAsync(CancellationToken.None);
+            var workflows = await Store.RetrieveAsync(CancellationToken.None);
 
             var engine = new RulesEngine.RulesEngine(workflows, _logger, _settings);
             return engine;
