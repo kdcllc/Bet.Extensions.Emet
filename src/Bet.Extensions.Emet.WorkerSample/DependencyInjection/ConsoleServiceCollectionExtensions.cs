@@ -18,25 +18,49 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddCountryWorkflow()
                     .AddDiscountWorkflow()
-                    .AddRetirementEligibilityWorkflow();
+                    .AddRetirementEligibilityWorkflow(EmetStoreEnum.AzureStorage);
         }
 
-        public static IServiceCollection AddRetirementEligibilityWorkflow(this IServiceCollection services)
+        public static IServiceCollection AddRetirementEligibilityWorkflow(this IServiceCollection services, EmetStoreEnum storeType)
         {
+            var workflowName = storeType switch
+            {
+                EmetStoreEnum.FileSystem => Workflows.RetirementEligibilityWorkflow,
+                EmetStoreEnum.AzureStorage => Workflows.AzureRetirementEligibilityWorkflow,
+                _ => throw new NotImplementedException()
+            };
+
             services.AddTransient<IRetirementService>(
                     sp =>
                     {
                         var providers = sp.GetServices<IEmetProvider>().ToList();
-                        var provider = providers.FirstOrDefault(x => x.Name == Workflows.RetirementEligibilityWorkflow);
+                        var provider = providers.FirstOrDefault(x => x.Name == workflowName);
+                        if (provider == null)
+                        {
+                            throw new ArgumentNullException(workflowName, $"IEmetProvider wasn't register");
+                        }
 
                         return new RetirementService(provider);
                     });
 
-            services.AddEmetProvider(Workflows.RetirementEligibilityWorkflow)
-                    .AddFileLoader(configure: (options, sp) =>
+            var builder = services.AddEmetProvider(workflowName);
+
+            if (storeType == EmetStoreEnum.FileSystem)
+            {
+                builder.AddFileLoader(configure: (options, config) =>
+                {
+                    options.FileName = $"Data/{Workflows.RetirementEligibilityWorkflow}.json";
+                });
+            }
+            else if (storeType == EmetStoreEnum.AzureStorage)
+            {
+                builder.AddAzureStorageLoader(
+                    workflowName,
+                    configOptions: (options, config) =>
                     {
-                        options.FileName = $"Data/{Workflows.RetirementEligibilityWorkflow}.json";
+                        options.BlobServiceUri = new Uri(config["SharedBlobServiceUri"]);
                     });
+            }
 
             return services;
         }
@@ -53,7 +77,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     });
 
             services.AddEmetProvider(Workflows.DiscountWorkflow)
-                    .AddFileLoader(configure: (options, sp) =>
+                    .AddFileLoader(configure: (options, config) =>
                     {
                         options.FileName = $"Data/{Workflows.DiscountWorkflow}.json";
                     });

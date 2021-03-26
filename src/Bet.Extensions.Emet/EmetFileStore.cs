@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -27,6 +28,14 @@ namespace Bet.Extensions.Emet
         {
             Name = providerName;
             _options = optionsMonitor.Get(providerName);
+            optionsMonitor.OnChange((o, n) =>
+            {
+                if (n == providerName)
+                {
+                    _options = o;
+                }
+            });
+
             _logger = logger;
         }
 
@@ -34,34 +43,50 @@ namespace Bet.Extensions.Emet
 
         public Task<WorkflowRules[]> RetrieveAsync(CancellationToken cancellationToken)
         {
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), _options.FileName);
-            if (Path.IsPathRooted(_options.FileName))
+            try
             {
-                filePath = _options.FileName;
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), _options.FileName);
+                if (Path.IsPathRooted(_options.FileName))
+                {
+                    filePath = _options.FileName;
+                }
+
+                var fileData = File.ReadAllText(filePath);
+                var rules = JsonConvert.DeserializeObject<WorkflowRules[]>(fileData);
+
+                return Task.FromResult(rules);
             }
-
-            var fileData = File.ReadAllText(filePath);
-            var rules = JsonConvert.DeserializeObject<WorkflowRules[]>(fileData);
-
-            return Task.FromResult(rules);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "EmetFileStore failed to retrieve: {filename}", _options.FileName);
+                throw;
+            }
         }
 
         public Task PersistAsync(WorkflowRules[] rules, CancellationToken cancellationToken)
         {
-            var engine = new re(rules);
-
-            // provides with workflow validation
-            engine.AddWorkflow(rules);
-
-            var workflows = JsonConvert.SerializeObject(rules);
-
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), _options.FileName);
-            if (Path.IsPathRooted(_options.FileName))
+            try
             {
-                filePath = _options.FileName;
-            }
+                var engine = new re(rules);
 
-            File.WriteAllText(filePath, workflows);
+                // provides with workflow validation
+                engine.AddWorkflow(rules);
+
+                var workflows = JsonConvert.SerializeObject(rules);
+
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), _options.FileName);
+                if (Path.IsPathRooted(_options.FileName))
+                {
+                    filePath = _options.FileName;
+                }
+
+                File.WriteAllText(filePath, workflows);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "EmetFileStore failed to persist: {filename}", _options.FileName);
+                throw;
+            }
 
             return Task.CompletedTask;
         }

@@ -1,33 +1,34 @@
 ﻿using System;
-using System.Linq;
 
 using Bet.Extensions.Emet;
 using Bet.Extensions.Emet.Options;
 
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-
-using RulesEngine.Models;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class EmetProviderBuilderExtensions
     {
         /// <summary>
-        /// Adds <see cref="EmetFileStore"/> storage with the workflow.
+        /// Adds <see cref="EmetFileStore"/> storage with the workflow registration.
         /// </summary>
-        /// <param name="builder"></param>
+        /// <param name="builder">The <see cref="IEmetProviderBuilder"/>.</param>
         /// <param name="sectionName"></param>
         /// <param name="configure"></param>
+        /// <param name="loaderServiceLifeTime">The service lifetime of the provide, it not specified the lifetime is used of the <see cref="IEmetProvider"/>.</param>
         /// <returns></returns>
         public static IEmetProviderBuilder AddFileLoader(
             this IEmetProviderBuilder builder,
             string sectionName = nameof(EmetFileStoreOptions),
-            Action<EmetFileStoreOptions, IServiceProvider>? configure = null)
+            Action<EmetFileStoreOptions, IConfiguration>? configure = null,
+            ServiceLifetime? loaderServiceLifeTime = null)
         {
             // add options that support reload
             builder.Services.AddChangeTokenOptions(sectionName, builder.Name, configure);
 
+            // add file store provider
             builder.Services.Add(new ServiceDescriptor(
                             typeof(IEmetStore),
                             sp =>
@@ -37,24 +38,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
                                 return new EmetFileStore(builder.Name, options, logger);
                             },
-                            builder.ServiceLifetime));
-
-            builder.Services.Add(
-                            new ServiceDescriptor(
-                                typeof(IEmetProvider),
-                                sp =>
-                                {
-                                    var logger = sp.GetRequiredService<ILoggerFactory>().CreateLogger(builder.Name);
-                                    var stores = sp.GetServices<IEmetStore>().ToList();
-
-                                    var store = stores.FirstOrDefault(x => x.Name == builder.Name);
-
-                                    var se = new ReSettings();
-                                    builder.Settings?.Invoke(se);
-
-                                    return new EmetProvider(builder.Name, se, store, logger);
-                                },
-                                builder.ServiceLifetime));
+                            loaderServiceLifeTime ?? builder.ServiceLifetime));
 
             return builder;
         }

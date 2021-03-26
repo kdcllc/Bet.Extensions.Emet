@@ -1,9 +1,11 @@
 {
   "profiles": {
-    "bet.extensions.emet.workersample": {
+    "Bet.Extensions.Emet.Workersample": {
       "commandName": "Project",
       "environmentVariables": {
-        "DOTNET_ENVIRONMENT": "Development"
+        "DOTNET_ENVIRONMENT": "Development",
+        "MSI_ENDPOINT" : "http://localhost:5050/oauth2/token",
+        "MSI_SECRET" : "38597b24-96c9-4b5a-b5c5-405469523460"
       },
       "dotnetRunMessages": "true"
     },
