@@ -7,6 +7,11 @@
 
   <PropertyGroup>
     <ExtensionsVersion>3.1.7</ExtensionsVersion>
+    <BetCommon>3.1.7</BetCommon>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework.TrimEnd(`0123456789.`))' == 'net'">
+    <ExtensionsVersion>5.0.*</ExtensionsVersion>
   </PropertyGroup>
 
   <ItemGroup Label="Microsoft.Extensions.Hosting">
@@ -36,6 +41,7 @@
 
   <ItemGroup>
     <PackageReference Update="RulesEngine" Version="3.0.2" />
+    <PackageReference Update="Bet.Extensions.Options" Version="$(BetCommon)" />
   </ItemGroup>
 
   <ItemGroup Label="Unit Tests">

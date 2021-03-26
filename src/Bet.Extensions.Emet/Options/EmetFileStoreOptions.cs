@@ -1,7 +1,9 @@
 ﻿namespace Bet.Extensions.Emet.Options
 {
-    public class RulesEngineStoreOptions
+    public class EmetFileStoreOptions
     {
+        public string FileName { get; set; } = string.Empty;
+
         public bool IsCached { get; set; }
     }
 }
