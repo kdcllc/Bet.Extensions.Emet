@@ -21,6 +21,7 @@
       This works in a very simple way by giving you an ability to put your rules in a store outside the core logic of the system thus ensuring
       that any change in rules doesn't affect the core system.
     </Description>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/kdcllc/Bet.Extensions.Pravda</PackageProjectUrl>
     <RepositoryUrl>https://github.com/kdcllc/Bet.Extensions.Pravda.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>

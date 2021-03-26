@@ -1,0 +1,21 @@
+[
+  {
+    "WorkflowName": "CountryWorkflow",
+    "Rules": [
+      {
+        "RuleName": "Country",
+        "SuccessEvent": "true",
+        "ErrorMessage": "Country is not acceptable",
+        "ErrorType": "Error",
+        "localParams": [
+          {
+            "Name": "model2",
+            "Expression": "\"india,usa,canada,France,China\""
+          }
+        ],
+        "RuleExpressionType": "LambdaExpression",
+        "Expression": "ExpressionHelper.CheckContains(input1.country, model2) == true"
+      }
+    ]
+  }
+]

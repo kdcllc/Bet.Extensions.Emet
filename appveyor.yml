@@ -5,9 +5,9 @@ branches:
 pull_requests:
   do_not_increment_build_number: true
 image: Visual Studio 2019
-## temporary until 5.0.100-preview.7.20366.6 sdk is installed
+## temporary until 5.0.201 sdk is installed
 install:
-  - ps: $urlCurrent = "https://dotnetcli.blob.core.windows.net/dotnet/Sdk/5.0.100-preview.7.20366.6/dotnet-sdk-5.0.100-preview.7.20366.6-win-x64.zip"
+  - ps: $urlCurrent = "https://dotnetcli.blob.core.windows.net/dotnet/Sdk/5.0.201/dotnet-sdk-5.0.201-win-x64.zip"
   - ps: $env:DOTNET_INSTALL_DIR = "$pwd\.dotnetsdk"
   - ps: mkdir $env:DOTNET_INSTALL_DIR -Force | Out-Null
   - ps: $tempFileCurrent = [System.IO.Path]::GetTempFileName()
@@ -20,12 +20,12 @@ nuget:
 
 build_script:
   - ps: dotnet nuget locals --clear all
-  - ps: dotnet restore Bet.Extensions.Rules.Engine.sln -v quiet
-  - ps: dotnet build Bet.Extensions.Rules.Engine.sln  --no-restore -p:configuration=Release -p:Version=$($env:appveyor_build_version) -p:GeneratePackageOnBuild=true
-  - ps: dotnet pack Bet.Extensions.Rules.Engine.sln  --no-build -p:configuration=Release -p:Version=$($env:appveyor_build_version) -o packages
+  - ps: dotnet restore Bet.Extensions.Emet.sln -v quiet
+  - ps: dotnet build Bet.Extensions.Emet.sln  --no-restore -p:configuration=Release -p:Version=$($env:appveyor_build_version) -p:GeneratePackageOnBuild=true
+  - ps: dotnet pack Bet.Extensions.Emet.sln  --no-build -p:configuration=Release -p:Version=$($env:appveyor_build_version) -o packages
 
 test_script:
-  - ps: dotnet test test/Bet.Extensions.Rules.Engine.UnitTest/Bet.Extensions.Rules.Engine.UnitTest.csproj -c Release --no-build
+  - ps: dotnet test test/Bet.Extensions.Emet.UnitTest/Bet.Extensions.Emet.UnitTest.csproj -c Release --no-build
 
 artifacts:
 - path: .\packages\**\*.nupkg
