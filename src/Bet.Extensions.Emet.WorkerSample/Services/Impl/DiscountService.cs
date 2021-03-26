@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -20,9 +21,12 @@ namespace Bet.Extensions.Emet.WorkerSample.Services
             var discount = 0m;
             var engine = await _provider.RulesEngine.Value;
 
-            var resultList = await engine.ExecuteAllRulesAsync("Discount", inputs);
+            var resultList = await engine.ExecuteAllRulesAsync(_provider.Name, inputs);
 
-            resultList.OnSuccess((eventName) =>
+            var f = resultList.Where(x => x.IsSuccess).OrderBy(o => o.Rule.RuleName);
+            //var p = f.Rule.RuleName;
+
+            resultList.OnSuccess2((eventName, errorMessage) =>
             {
                 discount = Convert.ToDecimal(eventName);
             });

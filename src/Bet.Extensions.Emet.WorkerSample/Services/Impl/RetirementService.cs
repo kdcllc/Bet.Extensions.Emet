@@ -19,7 +19,7 @@ namespace Bet.Extensions.Emet.WorkerSample.Services
         {
             var engine = await _provider.RulesEngine.Value;
 
-            var results = await engine.ExecuteAllRulesAsync("RetirementEligibility", employee);
+            var results = await engine.ExecuteAllRulesAsync(_provider.Name, employee);
             return results.FirstOrDefault()?.IsSuccess ?? false;
         }
     }

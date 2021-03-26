@@ -1,6 +1,6 @@
 [
 	{
-		"WorkflowName": "RetirementEligibility",
+		"WorkflowName": "RetirementEligibilityWorkflow",
 		"Rules": [
 			{
 				"RuleName": "IsEligible",

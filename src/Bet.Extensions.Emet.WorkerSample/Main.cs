@@ -20,6 +20,7 @@ namespace Bet.Extensions.Emet.WorkerSample
         private readonly IEnumerable<IEmetProvider> _providers;
         private readonly IDiscountService _discountService;
         private readonly IRetirementService _retirementService;
+        private readonly ICountryService _countryService;
         private readonly IHostApplicationLifetime _applicationLifetime;
         private ILogger<Main> _logger;
 
@@ -28,12 +29,14 @@ namespace Bet.Extensions.Emet.WorkerSample
         public Main(
             IDiscountService discountService,
             IRetirementService retirementService,
+            ICountryService countryService,
             IHostApplicationLifetime applicationLifetime,
             IConfiguration configuration,
             ILogger<Main> logger)
         {
             _discountService = discountService ?? throw new ArgumentNullException(nameof(discountService));
             _retirementService = retirementService ?? throw new ArgumentNullException(nameof(retirementService));
+            _countryService = countryService ?? throw new ArgumentNullException(nameof(countryService));
             _applicationLifetime = applicationLifetime ?? throw new ArgumentNullException(nameof(applicationLifetime));
             Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -61,6 +64,11 @@ namespace Bet.Extensions.Emet.WorkerSample
                 : $"Discount offered is {discountOffered * 100}% over MRP.";
 
             _logger.LogInformation(discountMessage);
+
+            var country = "usa";
+            var isValidCountry = await _countryService.IsAcceptableAsync(country);
+
+            _logger.LogInformation("{country} is acceptable: {isValid}", country, isValidCountry);
 
             return 0;
         }
