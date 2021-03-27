@@ -31,6 +31,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bet.Extensions.Emet.Azure.Storage", "src\Bet.Extensions.Emet.Azure.Storage\Bet.Extensions.Emet.Azure.Storage.csproj", "{C2F041E0-1517-4A16-9FF1-9F1A3D6ECC47}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,10 @@ Global
 		{C2117D1E-8BB9-40DA-8EAD-A585360837C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C2117D1E-8BB9-40DA-8EAD-A585360837C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C2117D1E-8BB9-40DA-8EAD-A585360837C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2F041E0-1517-4A16-9FF1-9F1A3D6ECC47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2F041E0-1517-4A16-9FF1-9F1A3D6ECC47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2F041E0-1517-4A16-9FF1-9F1A3D6ECC47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2F041E0-1517-4A16-9FF1-9F1A3D6ECC47}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -57,6 +63,7 @@ Global
 		{9406B57F-DD7E-4742-8583-F87BE3D81151} = {8ACBACBF-2608-4701-B506-5612EA33A7FE}
 		{3E60D3B5-24DA-4CD4-BF3A-BF3B3D8506A3} = {3DE382C5-F26A-4528-B21C-67D34E547A43}
 		{C2117D1E-8BB9-40DA-8EAD-A585360837C5} = {8ACBACBF-2608-4701-B506-5612EA33A7FE}
+		{C2F041E0-1517-4A16-9FF1-9F1A3D6ECC47} = {8ACBACBF-2608-4701-B506-5612EA33A7FE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {066F6A4B-8C1A-4621-9E73-8EFE2DD6B743}

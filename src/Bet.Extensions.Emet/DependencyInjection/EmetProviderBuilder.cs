@@ -4,7 +4,10 @@ using RulesEngine.Models;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    internal class EmetProviderBuilder : IEmetProviderBuilder
+    /// <summary>
+    /// The default <see cref="EmetProviderBuilder"/> class to be used with DI registration process.
+    /// </summary>
+    public class EmetProviderBuilder : IEmetProviderBuilder
     {
         public EmetProviderBuilder(
             IServiceCollection services,

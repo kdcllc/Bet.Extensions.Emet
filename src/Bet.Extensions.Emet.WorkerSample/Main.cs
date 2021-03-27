@@ -51,8 +51,8 @@ namespace Bet.Extensions.Emet.WorkerSample
 
             var employee = new Employee
             {
-                LengthOfServiceInDays = 25,
-                IsOverridden = true
+                LengthOfServiceInDays = 990,
+                IsOverridden = false
             };
 
             var isEligible = await _retirementService.IsEligibleAsync(employee);
