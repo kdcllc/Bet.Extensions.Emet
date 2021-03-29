@@ -23,8 +23,8 @@ The backbone of this library is [RulesEngine](`https://github.com/microsoft/Rule
 [Read more on the design pattern by Martin Fowler](https://martinfowler.com/bliki/RulesEngine.html)
 ### Features
 
-- [x] File Loader
-- [x] Azure Storage Blob Loader
+- [x] [File Loader](src/Bet.Extensions.Emet/)
+- [x] [Azure Storage Blob Loader](src/Bet.Extensions.Emet.Azure.Storage/)
 - [x] Dependency Injection registration; one workflow file per one specific data loader store.
 - [ ] SQLite
 - [ ] MS Sql
