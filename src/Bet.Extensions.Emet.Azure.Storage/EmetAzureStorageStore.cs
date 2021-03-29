@@ -41,7 +41,22 @@ namespace Bet.Extensions.Emet.Azure.Storage
 
             _options = optionsMonitor.Get(Name);
 
-            _client = new BlobServiceClient(_options.BlobServiceUri, new DefaultAzureCredential(), _options?.BlobClientOptions ?? new BlobClientOptions());
+            optionsMonitor.OnChange((options, name) =>
+            {
+                if (name == Name)
+                {
+                    _options = options;
+                }
+            });
+
+            if (string.IsNullOrEmpty(_options.ConnectionString))
+            {
+                _client = new BlobServiceClient(_options.BlobServiceUri, new DefaultAzureCredential(), _options?.BlobClientOptions ?? new BlobClientOptions());
+            }
+            else
+            {
+                _client = new BlobServiceClient(_options.ConnectionString, _options?.BlobClientOptions ?? new BlobClientOptions());
+            }
         }
 
         public string Name {get; }
