@@ -1,8 +1,7 @@
-﻿namespace Bet.Extensions.Emet
+﻿namespace Bet.Extensions.Emet;
+
+public enum EmetStoreEnum
 {
-    public enum EmetStoreEnum
-    {
-        FileSystem,
-        AzureStorage
-    }
+    FileSystem,
+    AzureStorage
 }

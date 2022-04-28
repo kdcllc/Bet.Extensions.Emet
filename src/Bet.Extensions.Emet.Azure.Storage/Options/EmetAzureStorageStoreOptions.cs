@@ -5,34 +5,31 @@ using Azure.Storage.Blobs;
 
 using Bet.Extensions.Emet.Options;
 
-namespace Bet.Extensions.Emet.Azure.Storage.Options
+namespace Bet.Extensions.Emet.Azure.Storage.Options;
+
+public class EmetAzureStorageStoreOptions : EmetFileStoreOptions
 {
-    public class EmetAzureStorageStoreOptions : EmetFileStoreOptions
-    {
-        /// <summary>
-        /// The full uri path to Azure Storage Blob: https://[name].blob.core.windows.net/.
-        /// </summary>
-        public Uri? BlobServiceUri { get; set; }
+    /// <summary>
+    /// The full uri path to Azure Storage Blob: https://[name].blob.core.windows.net/.
+    /// </summary>
+    public Uri? BlobServiceUri { get; set; }
 
-        /// <summary>
-        /// The connection string. If the connection string is empty then <see cref="DefaultAzureCredential"/> are used.
-        /// For local development with <see cref="DefaultAzureCredential"/> please use https://github.com/kdcllc/AppAuthentication.
-        ///
-        ///
-        /// az storage account show-connection-string --name <account_name> --resource-group <resource_group>
-        ///
-        ///
-        /// </summary>
-        public string ConnectionString { get; set; } = string.Empty;
+    /// <summary>
+    /// <para>
+    /// The connection string. If the connection string is empty then <see cref="DefaultAzureCredential"/> are used.
+    /// For local development with <see cref="DefaultAzureCredential"/> please use https://github.com/kdcllc/AppAuthentication.
+    /// </para>
+    /// <para>az storage account show-connection-string --name {account_name} --resource-group {resource_group}.</para>
+    /// </summary>
+    public string ConnectionString { get; set; } = string.Empty;
 
-        /// <summary>
-        /// The name of the Azure Storage Blob container.
-        /// </summary>
-        public string ContainerName { get; set; } = string.Empty;
+    /// <summary>
+    /// The name of the Azure Storage Blob container.
+    /// </summary>
+    public string ContainerName { get; set; } = string.Empty;
 
-        /// <summary>
-        /// Adds Options for blob Client.
-        /// </summary>
-        internal BlobClientOptions? BlobClientOptions { get; set; }
-    }
+    /// <summary>
+    /// Adds Options for blob Client.
+    /// </summary>
+    internal BlobClientOptions? BlobClientOptions { get; set; }
 }
