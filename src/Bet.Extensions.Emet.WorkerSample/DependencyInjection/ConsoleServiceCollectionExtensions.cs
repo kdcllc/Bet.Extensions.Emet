@@ -43,7 +43,7 @@ namespace Microsoft.Extensions.DependencyInjection
                         return new RetirementService(provider);
                     });
 
-            var builder = services.AddEmetProvider(workflowName);
+            var builder = services.AddEmetProvider(workflowName, ServiceLifetime.Singleton);
 
             if (storeType == EmetStoreEnum.FileSystem)
             {

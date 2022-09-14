@@ -19,10 +19,10 @@ namespace Bet.Extensions.Emet.Azure.Storage
 {
     public class EmetAzureStorageStore : IEmetStore
     {
-        private static readonly JsonSerializer _serializer = new ();
+        private static readonly JsonSerializer _serializer = new();
 
         private readonly ILogger<EmetAzureStorageStore> _logger;
-        private EmetAzureStorageStoreOptions _options;
+        private EmetAzureStorageStoreOptions? _options;
         private BlobServiceClient _client;
 
         public EmetAzureStorageStore(
@@ -40,6 +40,11 @@ namespace Bet.Extensions.Emet.Azure.Storage
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
             _options = optionsMonitor.Get(Name);
+
+            if (_options == null)
+            {
+                throw new ArgumentNullException($"'{nameof(providerName)}' options cannot be null", nameof(providerName));
+            }
 
             optionsMonitor.OnChange((options, name) =>
             {
@@ -59,14 +64,14 @@ namespace Bet.Extensions.Emet.Azure.Storage
             }
         }
 
-        public string Name {get; }
+        public string Name { get; }
 
-        public async Task PersistAsync(WorkflowRules[] rules, CancellationToken cancellationToken)
+        public async Task PersistAsync(Workflow[] rules, CancellationToken cancellationToken)
         {
             try
             {
                 var result = await _client
-                                .GetBlobContainerClient(_options.ContainerName)
+                                .GetBlobContainerClient(_options!.ContainerName)
                                 .CreateIfNotExistsAsync(cancellationToken: cancellationToken);
 
                 var blob = _client.GetBlobContainerClient(_options.ContainerName).GetBlobClient(_options.FileName);
@@ -85,12 +90,12 @@ namespace Bet.Extensions.Emet.Azure.Storage
             }
         }
 
-        public async Task<WorkflowRules[]> RetrieveAsync(CancellationToken cancellationToken)
+        public async Task<Workflow[]> RetrieveAsync(CancellationToken cancellationToken)
         {
             try
             {
                 var container = await _client
-                    .GetBlobContainerClient(_options.ContainerName)
+                    .GetBlobContainerClient(_options!.ContainerName)
                     .CreateIfNotExistsAsync(cancellationToken: cancellationToken);
 
                 var blob = _client.GetBlobContainerClient(_options.ContainerName).GetBlobClient(_options.FileName);
@@ -103,9 +108,9 @@ namespace Bet.Extensions.Emet.Azure.Storage
 
                 using var jsonStr = new StreamReader(data);
                 using var jsonTextReader = new JsonTextReader(jsonStr);
-                var result = _serializer.Deserialize<WorkflowRules[]>(jsonTextReader);
+                var result = _serializer.Deserialize<Workflow[]>(jsonTextReader);
 
-                return result ?? new WorkflowRules[0];
+                return result ?? new Workflow[0];
             }
             catch (Exception ex)
             {

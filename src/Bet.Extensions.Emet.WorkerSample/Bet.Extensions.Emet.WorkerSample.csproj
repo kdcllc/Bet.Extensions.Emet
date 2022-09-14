@@ -10,7 +10,7 @@
   <ItemGroup>
     <PackageReference Include="Bet.Extensions.Templating.Console" Version="2.0.*" />
     <PackageReference Include="Microsoft.Extensions.Hosting" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.*" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.*" />
   </ItemGroup>
 
   <ItemGroup>

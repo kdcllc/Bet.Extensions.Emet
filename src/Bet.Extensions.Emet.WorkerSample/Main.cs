@@ -65,12 +65,17 @@ namespace Bet.Extensions.Emet.WorkerSample
 
             _logger.LogInformation(discountMessage);
 
-            var country = "Israel";
+            await IsValidCountry("Israel");
+            await IsValidCountry("Ukraine");
+
+            return 0;
+        }
+
+        private async Task IsValidCountry(string country)
+        {
             var isValidCountry = await _countryService.IsAcceptableAsync(country);
 
             _logger.LogInformation("{country} is acceptable: {isValid}", country, isValidCountry);
-
-            return 0;
         }
 
         private dynamic[] GetDiscountInput()

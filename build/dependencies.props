@@ -6,7 +6,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<ExtensionsVersion>4.0.*</ExtensionsVersion>
+		<ExtensionsVersion>6.0.*</ExtensionsVersion>
 		<BetCommon>4.0.*</BetCommon>
 	</PropertyGroup>
 
@@ -17,12 +17,12 @@
 
 	<ItemGroup Label="Microsoft.Extensions.Hosting">
 		<PackageReference Update="Microsoft.Extensions.Hosting" Version="$(ExtensionsVersion)" />
-		<PackageReference Update="Microsoft.Extensions.Hosting.Abstractions"  Version="$(ExtensionsVersion)"/>
+		<PackageReference Update="Microsoft.Extensions.Hosting.Abstractions" Version="$(ExtensionsVersion)" />
 	</ItemGroup>
 
 	<ItemGroup Label="Microsoft.Extensions.Logging">
-		<PackageReference Update="Microsoft.Extensions.Logging" Version="$(ExtensionsVersion)"/>
-		<PackageReference Update="Microsoft.Extensions.Logging.Configuration" Version="$(ExtensionsVersion)"/>
+		<PackageReference Update="Microsoft.Extensions.Logging" Version="$(ExtensionsVersion)" />
+		<PackageReference Update="Microsoft.Extensions.Logging.Configuration" Version="$(ExtensionsVersion)" />
 		<PackageReference Update="Microsoft.Extensions.Logging.Console" Version="$(ExtensionsVersion)" />
 		<PackageReference Update="Microsoft.Extensions.Logging.Debug" Version="$(ExtensionsVersion)" />
 	</ItemGroup>
@@ -41,18 +41,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Update="RulesEngine" Version="3.5.0" />
+		<PackageReference Update="RulesEngine" Version="3.5.*" />
 		<PackageReference Update="Bet.Extensions.Options" Version="$(BetCommon)" />
-	    <PackageReference Update="Azure.Identity" Version="1.6.0" />
-		<PackageReference Update="Azure.Storage.Blobs" Version="12.11.0" />
-		<PackageReference Update="Microsoft.Extensions.Azure" Version="1.1.*" />
+		<PackageReference Update="Azure.Identity" Version="1.6.*" />
+		<PackageReference Update="Azure.Storage.Blobs" Version="12.13.*" />
+		<PackageReference Update="Microsoft.Extensions.Azure" Version="1.5.*" />
 	</ItemGroup>
 
 	<ItemGroup Label="Unit Tests">
-		<PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.1.*" />
+		<PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.3.*" />
 		<PackageReference Update="Moq" Version="4.14.5" />
-		<PackageReference Update="xunit" Version="2.4.1" />
-		<PackageReference Update="xunit.runner.visualstudio" Version="2.4.3" />
+		<PackageReference Update="xunit" Version="2.4.*" />
+		<PackageReference Update="xunit.runner.visualstudio" Version="2.4.*" />
 		<PackageReference Update="coverlet.collector" Version="3.1.*" />
 	</ItemGroup>
 
