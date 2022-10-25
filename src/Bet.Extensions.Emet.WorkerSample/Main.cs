@@ -83,15 +83,15 @@ public class Main : IMain
         var telemetryInfo = "{\"noOfVisitsPerMonth\": 10,\"percentageOfBuyingToVisit\": 15}";
 
         var converter = new ExpandoObjectConverter();
-        dynamic input1 = JsonConvert.DeserializeObject<ExpandoObject>(basicInfo, converter);
-        dynamic input2 = JsonConvert.DeserializeObject<ExpandoObject>(orderInfo, converter);
-        dynamic input3 = JsonConvert.DeserializeObject<ExpandoObject>(telemetryInfo, converter);
+        dynamic input1 = JsonConvert.DeserializeObject<ExpandoObject>(basicInfo, converter)!;
+        dynamic input2 = JsonConvert.DeserializeObject<ExpandoObject>(orderInfo, converter)!;
+        dynamic input3 = JsonConvert.DeserializeObject<ExpandoObject>(telemetryInfo, converter)!;
 
         return new dynamic[]
                 {
-                    input1,
-                    input2,
-                    input3
+                    input1!,
+                    input2!,
+                    input3!
                 };
     }
 }
