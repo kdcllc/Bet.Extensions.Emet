@@ -5,9 +5,9 @@ branches:
 pull_requests:
   do_not_increment_build_number: true
 image: Visual Studio 2022
-## temporary until 6.0.300 sdk is installed
+## temporary until 6.0.400 sdk is installed
 install:
-  - ps: $urlCurrent = "https://dotnetcli.blob.core.windows.net/dotnet/Sdk/6.0.300/dotnet-sdk-6.0.300-win-x64.zip"
+  - ps: $urlCurrent = "https://dotnetcli.blob.core.windows.net/dotnet/Sdk/6.0.400/dotnet-sdk-6.0.400-win-x64.zip"
   - ps: $env:DOTNET_INSTALL_DIR = "$pwd\.dotnetsdk"
   - ps: mkdir $env:DOTNET_INSTALL_DIR -Force | Out-Null
   - ps: $tempFileCurrent = [System.IO.Path]::GetTempFileName()
@@ -35,6 +35,6 @@ deploy:
 - provider: NuGet
   artifact: /NuGet/
   api_key:
-    secure: a8sCawSwgb2kYDJAN+xTUvy+MH5jdJR+DmKakUmc/Xom1c+uxyvV+yvpSTJs+ypF
+    secure: kgfx3UjQf8mUXlve528oftCtzSfX1DW13tmOrV7Ozh1IhWvwvih9W4BwisOYZZ+C
   on:
     branch: master
