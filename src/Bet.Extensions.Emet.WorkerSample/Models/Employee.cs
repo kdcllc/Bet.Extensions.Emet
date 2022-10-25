@@ -1,9 +1,8 @@
-﻿namespace Bet.Extensions.Emet.WorkerSample.Models
-{
-    public class Employee
-    {
-        public int LengthOfServiceInDays { get; set; }
+﻿namespace Bet.Extensions.Emet.WorkerSample.Models;
 
-        public bool IsOverridden { get; set; }
-    }
+public class Employee
+{
+    public int LengthOfServiceInDays { get; set; }
+
+    public bool IsOverridden { get; set; }
 }

@@ -24,8 +24,8 @@ namespace Bet.Extensions.Emet.WorkerSample.Services
             var resultList = await engine.ExecuteAllRulesAsync(_provider.Name, inputs);
 
             var f = resultList.Where(x => x.IsSuccess).OrderBy(o => o.Rule.RuleName);
-            //var p = f.Rule.RuleName;
 
+            // var p = f.Rule.RuleName;
             resultList.OnResultSuccess((eventName, errorMessage) =>
             {
                 discount = Convert.ToDecimal(eventName);

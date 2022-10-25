@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,6 +22,12 @@ public class EmetFileStore : IEmetStore
     private readonly ILogger<EmetFileStore> _logger;
     private EmetFileStoreOptions _options;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="EmetFileStore"/> class.
+    /// </summary>
+    /// <param name="providerName"></param>
+    /// <param name="optionsMonitor"></param>
+    /// <param name="logger"></param>
     public EmetFileStore(
         string providerName,
         IOptionsMonitor<EmetFileStoreOptions> optionsMonitor,
@@ -39,52 +46,71 @@ public class EmetFileStore : IEmetStore
         _logger = logger;
     }
 
+    /// <inheritdoc/>
     public string Name { get; }
 
+    /// <inheritdoc/>
     public Task<Workflow[]> RetrieveAsync(CancellationToken cancellationToken)
     {
+        var fileName = string.Empty;
         try
         {
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), _options.FileName);
-            if (Path.IsPathRooted(_options.FileName))
+            var result = new List<Workflow>();
+            foreach (var workflowName in _options.FileNames)
             {
-                filePath = _options.FileName;
+                fileName = workflowName;
+
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), workflowName);
+                if (Path.IsPathRooted(workflowName))
+                {
+                    filePath = workflowName;
+                }
+
+                var fileData = File.ReadAllText(filePath);
+                var workflow = JsonConvert.DeserializeObject<Workflow[]>(fileData);
+                if (workflow != null)
+                {
+                    result.AddRange(workflow);
+                }
             }
 
-            var fileData = File.ReadAllText(filePath);
-            var rules = JsonConvert.DeserializeObject<Workflow[]>(fileData);
-
-            return Task.FromResult(rules ?? new Workflow[0]);
+            return Task.FromResult(result.ToArray());
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "EmetFileStore failed to retrieve: {filename}", _options.FileName);
+            _logger.LogError(ex, "{name} failed to retrieve: {fileName}", nameof(EmetFileStore), fileName);
             throw;
         }
     }
 
-    public Task PersistAsync(Workflow[] rules, CancellationToken cancellationToken)
+    /// <inheritdoc/>
+    public Task PersistAsync(Workflow[] workflows, CancellationToken cancellationToken)
     {
+        var fileName = string.Empty;
         try
         {
-            var engine = new re(rules);
+            var engine = new re(workflows);
 
             // provides with workflow validation
-            engine.AddWorkflow(rules);
+            engine.AddWorkflow(workflows);
 
-            var workflows = JsonConvert.SerializeObject(rules);
-
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), _options.FileName);
-            if (Path.IsPathRooted(_options.FileName))
+            foreach (var workflow in workflows)
             {
-                filePath = _options.FileName;
-            }
+                fileName = $"{workflow.WorkflowName}.json";
 
-            File.WriteAllText(filePath, workflows);
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), fileName);
+                if (Path.IsPathRooted(fileName))
+                {
+                    filePath = fileName;
+                }
+
+                var serWorkflow = JsonConvert.SerializeObject(workflows);
+                File.WriteAllText(filePath, serWorkflow);
+            }
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "EmetFileStore failed to persist: {filename}", _options.FileName);
+            _logger.LogError(ex, "{name} failed to persist: {filename}", nameof(EmetFileStore), fileName);
             throw;
         }
 

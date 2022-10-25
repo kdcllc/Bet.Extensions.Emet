@@ -25,7 +25,7 @@ The backbone of this library is [RulesEngine](`https://github.com/microsoft/Rule
 
 - [x] [File Loader](src/Bet.Extensions.Emet/)
 - [x] [Azure Storage Blob Loader](src/Bet.Extensions.Emet.Azure.Storage/)
-- [x] Dependency Injection registration; one workflow file per one specific data loader store.
+- [x] Dependency Injection registration; many workflows file per one specific data loader store.
 - [ ] SQLite
 - [ ] MS Sql
 - [ ] RavenDb
@@ -105,7 +105,7 @@ The follow is an example of including a workflow json file for validating countr
                     })
                     .AddFileLoader(configure: (options, sp) =>
                     {
-                        options.FileName = "Data/CountryWorkflow.json";
+                        options.FileNames = new List<string>{"Data/CountryWorkflow.json"};
                     });
             return services;
         }

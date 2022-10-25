@@ -25,8 +25,8 @@ public interface IEmetStore
     /// <summary>
     /// Persists the <see cref="Workflow"/> to the medium.
     /// </summary>
-    /// <param name="rules"></param>
+    /// <param name="workflows"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task PersistAsync(Workflow[] rules, CancellationToken cancellationToken);
+    Task PersistAsync(Workflow[] workflows, CancellationToken cancellationToken);
 }

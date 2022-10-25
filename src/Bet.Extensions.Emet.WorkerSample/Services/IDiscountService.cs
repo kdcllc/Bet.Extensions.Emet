@@ -1,10 +1,9 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace Bet.Extensions.Emet.WorkerSample.Services
+namespace Bet.Extensions.Emet.WorkerSample.Services;
+
+public interface IDiscountService
 {
-    public interface IDiscountService
-    {
-        Task<decimal> CalculateDiscountAsync(dynamic[] inputs, CancellationToken cancellationToken = default);
-    }
+    Task<decimal> CalculateDiscountAsync(dynamic[] inputs, CancellationToken cancellationToken = default);
 }
