@@ -3,31 +3,30 @@ using System.Threading.Tasks;
 
 using RulesEngine.Models;
 
-namespace Bet.Extensions.Emet
+namespace Bet.Extensions.Emet;
+
+/// <summary>
+/// The basic interface that allows for retrieval and storage of <see cref="Workflow"/>.
+/// </summary>
+public interface IEmetStore
 {
     /// <summary>
-    /// The basic interface that allows for retrieval and storage of <see cref="WorkflowRules"/>.
+    /// The name of the store, usually corresponds with the name of <see cref="IEmetProvider.Name"/>.
     /// </summary>
-    public interface IEmetStore
-    {
-        /// <summary>
-        /// The name of the store, usually corresponds with the name of <see cref="IEmetProvider.Name"/>.
-        /// </summary>
-        string Name { get; }
+    string Name { get; }
 
-        /// <summary>
-        /// Gets <see cref="WorkflowRules"/> that was persisted.
-        /// </summary>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        Task<WorkflowRules[]> RetrieveAsync(CancellationToken cancellationToken);
+    /// <summary>
+    /// Gets <see cref="Workflow"/> that was persisted.
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task<Workflow[]> RetrieveAsync(CancellationToken cancellationToken);
 
-        /// <summary>
-        /// Persists the <see cref="WorkflowRules"/> to the medium.
-        /// </summary>
-        /// <param name="rules"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        Task PersistAsync(WorkflowRules[] rules, CancellationToken cancellationToken);
-    }
+    /// <summary>
+    /// Persists the <see cref="Workflow"/> to the medium.
+    /// </summary>
+    /// <param name="workflows"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task PersistAsync(Workflow[] workflows, CancellationToken cancellationToken);
 }

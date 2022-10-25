@@ -10,7 +10,7 @@
         "localParams": [
           {
             "Name": "model2",
-            "Expression": "\"india,usa,canada,France,China\""
+            "Expression": "\"india,usa,canada,France,Israel,China\""
           }
         ],
         "RuleExpressionType": "LambdaExpression",

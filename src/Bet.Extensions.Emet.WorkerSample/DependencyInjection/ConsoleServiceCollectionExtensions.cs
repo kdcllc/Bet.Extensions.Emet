@@ -8,106 +8,85 @@ using Bet.Extensions.Emet.WorkerSample.Services;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Microsoft.Extensions.DependencyInjection
+using RulesEngine.Models;
+
+namespace Microsoft.Extensions.DependencyInjection;
+
+public static class ConsoleServiceCollectionExtensions
 {
-    public static class ConsoleServiceCollectionExtensions
+    public static void ConfigureServices(HostBuilderContext hostBuilder, IServiceCollection services)
     {
-        public static void ConfigureServices(HostBuilderContext hostBuilder, IServiceCollection services)
-        {
-            services.AddScoped<IMain, Main>();
+        services.AddScoped<IMain, Main>();
 
-            services.AddCountryWorkflow()
-                    .AddDiscountWorkflow()
-                    .AddRetirementEligibilityWorkflow(EmetStoreEnum.AzureStorage);
-        }
-
-        public static IServiceCollection AddRetirementEligibilityWorkflow(this IServiceCollection services, EmetStoreEnum storeType)
-        {
-            var workflowName = storeType switch
-            {
-                EmetStoreEnum.FileSystem => Workflows.RetirementEligibilityWorkflow,
-                EmetStoreEnum.AzureStorage => Workflows.AzureRetirementEligibilityWorkflow,
-                _ => throw new NotImplementedException()
-            };
-
-            services.AddTransient<IRetirementService>(
-                    sp =>
-                    {
-                        var providers = sp.GetServices<IEmetProvider>().ToList();
-                        var provider = providers.FirstOrDefault(x => x.Name == workflowName);
-                        if (provider == null)
-                        {
-                            throw new ArgumentNullException(workflowName, $"IEmetProvider wasn't register");
-                        }
-
-                        return new RetirementService(provider);
-                    });
-
-            var builder = services.AddEmetProvider(workflowName);
-
-            if (storeType == EmetStoreEnum.FileSystem)
-            {
-                builder.AddFileLoader(configure: (options, config) =>
-                {
-                    options.FileName = $"Data/{Workflows.RetirementEligibilityWorkflow}.json";
-                });
-            }
-            else if (storeType == EmetStoreEnum.AzureStorage)
-            {
-                builder.AddAzureStorageLoader(
-                    workflowName,
-                    configOptions: (options, config) =>
-                    {
-                        options.BlobServiceUri = new Uri(config["SharedBlobServiceUri"]);
-                    });
-            }
-
-            return services;
-        }
-
-        public static IServiceCollection AddDiscountWorkflow(this IServiceCollection services)
-        {
-            services.AddTransient<IDiscountService>(
-                    sp =>
-                    {
-                        var providers = sp.GetServices<IEmetProvider>().ToList();
-                        var provider = providers.FirstOrDefault(x => x.Name == Workflows.DiscountWorkflow);
-
-                        return new DiscountService(provider);
-                    });
-
-            services.AddEmetProvider(Workflows.DiscountWorkflow)
-                    .AddFileLoader(configure: (options, config) =>
-                    {
-                        options.FileName = $"Data/{Workflows.DiscountWorkflow}.json";
-                    });
-
-            return services;
-        }
-
-        public static IServiceCollection AddCountryWorkflow(this IServiceCollection services)
-        {
-            services.AddTransient<ICountryService>(
-                    sp =>
-                    {
-                        var providers = sp.GetServices<IEmetProvider>().ToList();
-                        var logger = sp.GetRequiredService<ILogger<CountryService>>();
-                        var provider = providers.FirstOrDefault(x => x.Name == Workflows.CountryWorkflow);
-
-                        return new CountryService(provider, logger);
-                    });
-
-            services.AddEmetProvider(
+        services
+                .AddWorkflow<IRetirementService, RetirementService>(
+                    Workflows.RetirementEligibilityWorkflow,
+                    EmetStoreEnum.AzureStorage,
+                    (provider, logger) => new RetirementService(provider))
+                .AddWorkflow<IDiscountService, DiscountService>(
+                    Workflows.DiscountWorkflow,
+                    EmetStoreEnum.FileSystem,
+                    (provider, logger) => new DiscountService(provider))
+                .AddWorkflow<ICountryService, CountryService>(
                     Workflows.CountryWorkflow,
-                    reSettings: settings =>
+                    EmetStoreEnum.FileSystem,
+                    (provider, logger) => new CountryService(provider, logger),
+                    settings => settings.CustomTypes = new Type[] { typeof(ExpressionHelper) });
+    }
+
+    public static IServiceCollection AddWorkflow<T, TService>(
+                this IServiceCollection services,
+                string workflowName,
+                EmetStoreEnum storeType,
+                Func<IEmetProvider, ILogger<TService>, TService> configure,
+                Action<ReSettings>? settings = null)
+        where T : class
+        where TService : T
+    {
+        services.AddTransient<T>(
+                sp =>
+                {
+                    var providers = sp.GetServices<IEmetProvider>().ToList();
+                    var provider = providers.FirstOrDefault(x => x.Name == workflowName);
+
+                    if (provider == null)
                     {
-                        settings.CustomTypes = new Type[] { typeof(ExpressionHelper) };
-                    })
-                    .AddFileLoader(configure: (options, sp) =>
-                    {
-                        options.FileName = $"Data/{Workflows.CountryWorkflow}.json";
-                    });
-            return services;
+                        throw new ArgumentNullException(workflowName, $"{nameof(IEmetProvider)} wasn't register");
+                    }
+
+                    var logger = sp.GetRequiredService<ILogger<TService>>();
+
+                    return configure(provider, logger);
+                });
+
+        IEmetProviderBuilder builder;
+
+        if (settings == null)
+        {
+            builder = services.AddEmetProvider(workflowName);
         }
+        else
+        {
+            builder = services.AddEmetProvider(workflowName, reSettings: settings);
+        }
+
+        if (storeType == EmetStoreEnum.FileSystem)
+        {
+            builder.AddFileLoader(
+                sectionName: $"FileWorkflows:{workflowName}",
+                configure: (options, config) => { });
+        }
+        else if (storeType == EmetStoreEnum.AzureStorage)
+        {
+            builder.AddAzureStorageLoader(
+                sectionName: $"AzureWorkflows:{workflowName}",
+                configOptions: (options, config) =>
+                {
+                    options.BlobServiceUri = new Uri(config["AzureWorkflows:SharedBlobServiceUri"]);
+                },
+                loaderServiceLifeTime: ServiceLifetime.Singleton);
+        }
+
+        return services;
     }
 }

@@ -38,6 +38,7 @@ In order to make it work on local machine please make sure the following steps a
 2. `dotnet new tool-manifest` and install [AppAuthentication](https://github.com/kdcllc/AppAuthentication) - `dotnet tool install appauthentication`
 
 3. Run in the command prompt `appauthentication run --local --verbose:debug` in the root of your project. Make sure that Visual Studio or VSCode is restarted.
+
 ```json
 {
   "profiles": {
@@ -45,8 +46,8 @@ In order to make it work on local machine please make sure the following steps a
       "commandName": "Project",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development",
-        "MSI_ENDPOINT" : "http://localhost:5050/oauth2/token",
-        "MSI_SECRET" : "38597b24-96c9-4b5a-b5c5-405469523460"
+        "MSI_ENDPOINT": "http://localhost:5050/oauth2/token",
+        "MSI_SECRET": "38597b24-96c9-4b5a-b5c5-405469523460"
       },
       "dotnetRunMessages": "true"
     },
@@ -113,19 +114,25 @@ public static IServiceCollection AddRetirementEligibilityWorkflow(this IServiceC
   "AzureCountryWorkflow": {
     "BlobServiceUri": "",
     "ContainerName": "workflows",
-    "FileName": "CountryWorkflow.json"
+    "FileNames": [
+        "CountryWorkflow.json"
+    ]
   },
 
   "AzureRetirementEligibilityWorkflow": {
     "BlobServiceUri": "",
     "ContainerName": "workflows",
-    "FileName": "RetirementEligibilityWorkflow.json"
+    "FileNames": [
+        "RetirementEligibilityWorkflow.json"
+    ]
   },
 
   "AzureDiscountWorkflow": {
     "BlobServiceUri": "",
     "ContainerName": "workflows",
-    "FileName": "DiscountWorkflow.json"
+    "FileNames": [
+        "DiscountWorkflow.json"
+    ]
   },
 
 ```

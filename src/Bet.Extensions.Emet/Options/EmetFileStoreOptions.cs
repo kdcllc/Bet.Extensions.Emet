@@ -1,10 +1,11 @@
-﻿namespace Bet.Extensions.Emet.Options
+﻿using System.Collections.Generic;
+
+namespace Bet.Extensions.Emet.Options;
+
+public class EmetFileStoreOptions
 {
-    public class EmetFileStoreOptions
-    {
-        /// <summary>
-        /// File name of location to the file.
-        /// </summary>
-        public string FileName { get; set; } = string.Empty;
-    }
+    /// <summary>
+    /// File names of location to the file.
+    /// </summary>
+    public List<string> FileNames { get; set; } = new List<string>();
 }
