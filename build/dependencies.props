@@ -43,6 +43,7 @@
 	<ItemGroup>
 		<PackageReference Update="RulesEngine" Version="4.0.*" />
 		<PackageReference Update="Bet.Extensions.Options" Version="$(BetCommon)" />
+		<PackageReference Update="Bet.Extensions.Testing" Version="$(BetCommon)" />
 		<PackageReference Update="Azure.Identity" Version="1.7.*" />
 		<PackageReference Update="Azure.Storage.Blobs" Version="12.14.*" />
 		<PackageReference Update="Microsoft.Extensions.Azure" Version="1.6.*" />
