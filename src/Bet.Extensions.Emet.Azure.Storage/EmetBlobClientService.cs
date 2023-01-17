@@ -17,6 +17,12 @@ public class EmetBlobClientFactory : IEmetBlobClientFactory
         string name,
         IOptionsMonitor<EmetAzureStorageStoreOptions> optionsMonitor)
     {
+        if (string.IsNullOrEmpty(name))
+        {
+            throw new ArgumentException($"'{nameof(name)}' cannot be null or empty.", nameof(name));
+        }
+
+        Name = name;
 
         _options = optionsMonitor.Get(Name);
 

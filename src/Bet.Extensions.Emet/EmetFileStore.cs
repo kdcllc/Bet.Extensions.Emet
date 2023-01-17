@@ -33,7 +33,13 @@ public class EmetFileStore : IEmetStore
         IOptionsMonitor<EmetFileStoreOptions> optionsMonitor,
         ILogger<EmetFileStore> logger)
     {
+        if (string.IsNullOrEmpty(providerName))
+        {
+            throw new ArgumentException($"'{nameof(providerName)}' cannot be null or empty.", nameof(providerName));
+        }
+
         Name = providerName;
+
         _options = optionsMonitor.Get(providerName);
         optionsMonitor.OnChange((o, n) =>
         {
