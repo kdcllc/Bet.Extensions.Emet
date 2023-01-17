@@ -6,12 +6,12 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<ExtensionsVersion>6.0.*</ExtensionsVersion>
+		<ExtensionsVersion>7.0.*</ExtensionsVersion>
 		<BetCommon>4.0.*</BetCommon>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(TargetFramework)' == 'net6.0'">
-		<ExtensionsVersion>6.0.*</ExtensionsVersion>
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net7.0'">
+		<ExtensionsVersion>7.0.*</ExtensionsVersion>
 
 	</PropertyGroup>
 
@@ -43,17 +43,18 @@
 	<ItemGroup>
 		<PackageReference Update="RulesEngine" Version="4.0.*" />
 		<PackageReference Update="Bet.Extensions.Options" Version="$(BetCommon)" />
-		<PackageReference Update="Azure.Identity" Version="1.7.*" />
+		<PackageReference Update="Bet.Extensions.Testing" Version="$(BetCommon)" />
+		<PackageReference Update="Azure.Identity" Version="1.8.*" />
 		<PackageReference Update="Azure.Storage.Blobs" Version="12.14.*" />
 		<PackageReference Update="Microsoft.Extensions.Azure" Version="1.6.*" />
 	</ItemGroup>
 
 	<ItemGroup Label="Unit Tests">
-		<PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.3.*" />
-		<PackageReference Update="Moq" Version="4.14.5" />
+		<PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.4.*" />
+		<PackageReference Update="Moq" Version="4.18.*" />
 		<PackageReference Update="xunit" Version="2.4.*" />
 		<PackageReference Update="xunit.runner.visualstudio" Version="2.4.*" />
-		<PackageReference Update="coverlet.collector" Version="3.1.*" />
+		<PackageReference Update="coverlet.collector" Version="3.2.*" />
 	</ItemGroup>
 
 

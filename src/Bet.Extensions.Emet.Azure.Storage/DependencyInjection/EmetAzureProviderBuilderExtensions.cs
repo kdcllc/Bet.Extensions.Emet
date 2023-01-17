@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 using Azure.Storage.Blobs;
 
@@ -44,6 +45,17 @@ public static class EmetAzureProviderBuilderExtensions
         var options = new BlobClientOptions();
         configBlobOptions?.Invoke(options);
 
+        builder.Services.Add(
+            new ServiceDescriptor(
+                                   typeof(IEmetBlobClientFactory),
+                                   sp =>
+                                   {
+                                       var options = sp.GetRequiredService<IOptionsMonitor<EmetAzureStorageStoreOptions>>();
+
+                                       return new EmetBlobClientFactory(builder.Name, options);
+                                   },
+                                   builder.ServiceLifetime));
+
         builder.Services.Add(new ServiceDescriptor(
             typeof(IEmetStore),
             sp =>
@@ -51,7 +63,15 @@ public static class EmetAzureProviderBuilderExtensions
                 var logger = sp.GetRequiredService<ILogger<EmetAzureStorageStore>>();
                 var options = sp.GetRequiredService<IOptionsMonitor<EmetAzureStorageStoreOptions>>();
 
-                return new EmetAzureStorageStore(builder.Name, options, logger);
+                var blobFactories = sp.GetServices<IEmetBlobClientFactory>();
+
+                var blobFactory = blobFactories.FirstOrDefault(x => x.Name == builder.Name);
+                if (blobFactory == null)
+                {
+                    throw new ArgumentNullException(builder.Name, $"{nameof(IEmetBlobClientFactory)} wasn't register for {builder.Name}");
+                }
+
+                return new EmetAzureStorageStore(builder.Name, options, blobFactory, logger);
             },
             loaderServiceLifeTime ?? builder.ServiceLifetime));
 

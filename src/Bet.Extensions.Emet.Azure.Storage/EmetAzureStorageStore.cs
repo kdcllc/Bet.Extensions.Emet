@@ -4,7 +4,6 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-using Azure.Identity;
 using Azure.Storage.Blobs;
 
 using Bet.Extensions.Emet.Azure.Storage.Options;
@@ -31,12 +30,14 @@ public class EmetAzureStorageStore : IEmetStore
     /// </summary>
     /// <param name="providerName"></param>
     /// <param name="optionsMonitor"></param>
+    /// <param name="client"></param>
     /// <param name="logger"></param>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
     public EmetAzureStorageStore(
         string providerName,
         IOptionsMonitor<EmetAzureStorageStoreOptions> optionsMonitor,
+        IEmetBlobClientFactory client,
         ILogger<EmetAzureStorageStore> logger)
     {
         if (string.IsNullOrEmpty(providerName))
@@ -45,6 +46,8 @@ public class EmetAzureStorageStore : IEmetStore
         }
 
         Name = providerName;
+
+        _client = client.GetClient();
 
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
@@ -62,15 +65,6 @@ public class EmetAzureStorageStore : IEmetStore
                 _options = options;
             }
         });
-
-        if (string.IsNullOrEmpty(_options.ConnectionString))
-        {
-            _client = new BlobServiceClient(_options.BlobServiceUri, new DefaultAzureCredential(), _options?.BlobClientOptions ?? new BlobClientOptions());
-        }
-        else
-        {
-            _client = new BlobServiceClient(_options.ConnectionString, _options?.BlobClientOptions ?? new BlobClientOptions());
-        }
     }
 
     /// <inheritdoc/>
